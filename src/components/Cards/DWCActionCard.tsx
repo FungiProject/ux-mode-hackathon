@@ -38,18 +38,9 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
   const maxBalance = () => {
     let assets;
     let network;
-    if (chain && chain.id === 80001) {
+    if (chain && chain.id === 919) {
       assets = assetsPolygonMumbai;
       network = "mumbai";
-    } else if (chain && chain.id === 42161) {
-      assets = assetsArbitrum;
-      network = "atbitrum";
-    } else if (chain && chain.id === 1) {
-      assets = assetsMainnet;
-      network = "mainnet";
-    } else if (chain && chain.id === 137) {
-      assets = assetsPolygon;
-      network = "polygon";
     }
     if (assets && address && network) {
       const usdcAddress = assets.filter(

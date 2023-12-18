@@ -27,13 +27,7 @@ export default function ActionsSideBar({ page }: ActionsSideBarProps) {
   }, [isConnected]);
 
   useEffect(() => {
-    if (
-      chain &&
-      (chain.id === 42161 ||
-        chain.id === 80001 ||
-        chain.id === 1 ||
-        chain.id === 137)
-    ) {
+    if (chain && chain.id === 919) {
       const prev = networks.filter((network) => network.name === chain?.name);
 
       setPreviousNetwork(prev[0]);

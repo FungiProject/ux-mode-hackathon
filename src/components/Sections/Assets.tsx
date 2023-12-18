@@ -66,32 +66,14 @@ export default function Assets() {
     let copy: any[] = [];
     let initials: any[] = [];
     if (!sortByNetwork) {
-      if (chain && chain.id === 80001) {
+      if (chain && chain.id === 919) {
         copy = assetsPolygonMumbai;
         initials = assetsPolygonMumbai;
-      } else if (chain && chain.id === 42161) {
-        copy = assetsArbitrum;
-        initials = assetsArbitrum;
-      } else if (chain && chain.id === 1) {
-        copy = assetsMainnet;
-        initials = assetsMainnet;
-      } else if (chain && chain.id === 137) {
-        copy = assetsPolygon;
-        initials = assetsPolygon;
       }
     } else {
-      if (selectedNetwork && selectedNetwork.id === 80001) {
+      if (selectedNetwork && selectedNetwork.id === 919) {
         copy = assetsPolygonMumbai;
         initials = assetsPolygonMumbai;
-      } else if (selectedNetwork && selectedNetwork.id === 42161) {
-        copy = assetsArbitrum;
-        initials = assetsArbitrum;
-      } else if (selectedNetwork && selectedNetwork.id === 1) {
-        copy = assetsMainnet;
-        initials = assetsMainnet;
-      } else if (selectedNetwork && selectedNetwork.id === 137) {
-        copy = assetsPolygon;
-        initials = assetsPolygon;
       }
     }
 

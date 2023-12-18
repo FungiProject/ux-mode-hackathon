@@ -97,18 +97,9 @@ export default function Swapper({ actionSelected }: SwapperProps) {
   }, [tokenTo]);
 
   useEffect(() => {
-    if (chain && chain.id === 80001) {
+    if (chain && chain.id === 919) {
       setAssets(assetsPolygonMumbai);
       setNetwork("mumbai");
-    } else if (chain && chain.id === 42161) {
-      setAssets(assetsArbitrum);
-      setNetwork("arbitrum");
-    } else if (chain && chain.id === 1) {
-      setAssets(assetsMainnet);
-      setNetwork("mainnet");
-    } else if (chain && chain.id === 137) {
-      setAssets(assetsPolygon);
-      setNetwork("polygon");
     }
   }, [chain]);
 

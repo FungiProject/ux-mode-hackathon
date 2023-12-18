@@ -32,14 +32,8 @@ export default function TokenCard({ asset, getToken }: TokenCardProps) {
   });
 
   useEffect(() => {
-    if (chain && chain.id === 80001) {
+    if (chain && chain.id === 919) {
       setNetwork("mumbai");
-    } else if (chain && chain.id === 42161) {
-      setNetwork("arbitrum");
-    } else if (chain && chain.id === 1) {
-      setNetwork("mainnet");
-    } else if (chain && chain.id === 137) {
-      setNetwork("polygon");
     }
   }, [chain]);
 
