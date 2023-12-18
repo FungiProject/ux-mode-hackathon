@@ -62,7 +62,7 @@ export const navigation = [
     image: NetworkNavBar.src,
   },
   {
-    name: "Portfolio",
+    name: "Account",
     href: "/portfolio",
     image: PortfolioNavBar.src,
   },
@@ -94,22 +94,6 @@ export const integrations = [
       "Swap, earn, and build on the leading decentralized crypto trading protocol.",
     networks: [Mainnet.src, Arbitrum.src, Polygon.src],
     status: true,
-  },
-  {
-    protocolImage: GMX.src,
-    title: "GMX",
-    description:
-      "Decentralized exchange (DEX) for trading perpetual cryptocurrency futures.",
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    status: false,
-  },
-  {
-    protocolImage: AAVE.src,
-    title: "AAVE",
-    description:
-      "Decentralized liquidity protocol where users can participate as depositors or borrowers.",
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    status: false,
   },
 ];
 
@@ -484,12 +468,7 @@ export const funds = [
   },
 ];
 
-export const networks = [
-  { name: "Ethereum", id: 1, image: Mainnet.src },
-  { name: "Arbitrum One", id: 42161, image: Arbitrum.src },
-  { name: "Polygon", id: 137, image: Polygon.src },
-  { name: "Polygon Mumbai", id: 80001, image: Polygon.src },
-];
+export const networks = [{ name: "Mode Testnet", id: 919, image: Mainnet.src }];
 
 export const assetsArbitrum = [
   {

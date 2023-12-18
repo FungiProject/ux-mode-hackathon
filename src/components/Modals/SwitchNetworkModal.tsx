@@ -39,7 +39,7 @@ export default function SwitchNetworkModal({
       getOpenModal(false);
     }
   }, [chain]);
-
+  console.log(previousNetwork);
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={keepOpen}>
