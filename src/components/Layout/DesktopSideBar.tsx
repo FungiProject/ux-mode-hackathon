@@ -33,7 +33,13 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function DesktopSideBar() {
+type DesktopSideBarProps = {
+  smartAccountsArray: string[];
+};
+
+export default function DesktopSideBar({
+  smartAccountsArray,
+}: DesktopSideBarProps) {
   const [restOfNetworks, setRestOfNetworks] = useState<NetworkType[]>([]);
   const [previousNetwork, setPreviousNetwork] = useState<NetworkType>();
   const [needSwitch, setNeedSwitch] = useState<boolean>(false);
@@ -42,17 +48,6 @@ export default function DesktopSideBar() {
 
   const { chain } = useNetwork();
   const { address } = useAccount();
-
-  const {
-    data: smartAccountsArray,
-    isError,
-    isLoading,
-  } = useContractRead({
-    address: scaFactoryFacetAddress,
-    abi: abiSCAFactory,
-    functionName: "getSmartContractAccountsByOwner",
-    args: [address],
-  });
 
   const { config: txContractConfig } = usePrepareContractWrite({
     address: scaFactoryFacetAddress,
@@ -159,9 +154,7 @@ export default function DesktopSideBar() {
               </Link>
             </div>
           ))}
-          {smartAccountsArray !== undefined ? (
-            <div> </div>
-          ) : (
+          {smartAccountsArray?.length === 0 && (
             <button
               className="text-white bg-main px-[18px] py-[12px] rounded-xl text-sm font-medium hover:bg-mainHover"
               onClick={() => onWagmiClick()}

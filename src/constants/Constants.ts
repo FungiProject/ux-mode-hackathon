@@ -5,16 +5,12 @@ import IntegrationsNavBar from "../../public/IntegrationsNavBar.svg";
 import PortfolioNavBar from "../../public/PortfolioNavBar.svg";
 import Planet from "../../public/Planet.svg";
 import Coins from "../../public/Coins.svg";
-import DefaultImage from "../../public/DefaultImage.svg";
 // Mode Tokens
-import Polygon from "../../public/MainnetTokens/Polygon.svg";
 import Mainnet from "../../public/MainnetTokens/Mainnet.svg";
 import Tether from "../../public/ArbitrumTokens/Tether.jpeg";
 import Uniswap from "../../public/MainnetTokens/Uniswap.svg";
 import USDC from "../../public/MainnetTokens/USDC.svg";
 import Mode from "../../public/ModeChain.jpeg";
-
-// import Ox from "../../public/MainnetTokens/Ox.jpeg";
 
 export const navigation = [
   {
@@ -60,7 +56,7 @@ export const integrations = [
 
 export const homeCards = [
   {
-    title: "Funds",
+    title: "Accounts",
     amount: 0,
     imageHeight: 75,
     imageWidth: 75,

@@ -11,24 +11,50 @@ import FundsTable from "../Tables/FundsTable";
 import SortBy from "../Filters/SortBy";
 // Heroicons
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+// Wagmi
+import { useContractRead } from "wagmi";
+// Abi
+import { abiSCAFactory } from "../../../abis/abis.json";
+// Constants
+import { scaFactoryFacetAddress } from "@/constants/Constants";
+import Loader from "../Loader/Spinner";
 
 export default function Home() {
-  // const [fundsArrayCopy, setFundsArrayCopy] = useState<fundType[]>([...funds]);
-  // const [originalFunds, setOriginalFunds] = useState([...funds]);
+  const { data: smartAccountsArray } = useContractRead({
+    address: scaFactoryFacetAddress,
+    abi: abiSCAFactory,
+    functionName: "getCreatedSmartContractAccounts",
+    args: [],
+  });
+
+  const { data: totalAccounts } = useContractRead({
+    address: scaFactoryFacetAddress,
+    abi: abiSCAFactory,
+    functionName: "getSmartContractAccountCount",
+    args: [],
+  });
+
+  const [accountsArrayCopy, setAccountsArrayCopy] = useState<string[]>([
+    ...(smartAccountsArray ? (smartAccountsArray as string[]) : []),
+  ]);
+  const [originalFunds, setOriginalFunds] = useState<string[]>([
+    ...(smartAccountsArray ? (smartAccountsArray as string[]) : []),
+  ]);
   const [search, setSearch] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("Sort By");
-  // const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // const ITEMS_PER_PAGE = 5;
-  // const totalItems = fundsArrayCopy.length;
-  // const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const ITEMS_PER_PAGE = 5;
+  const totalItems = accountsArrayCopy.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  // const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
-  // const handlePageChange = (newPage: number) => {
-  //   setCurrentPage(newPage);
-  // };
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
 
   const getInfo = (query: string) => {
     setSearch(query);
@@ -38,74 +64,67 @@ export default function Home() {
     setSortBy(option);
   };
 
-  // const handleClickNext = () => {
-  //   setCurrentPage(currentPage + 1);
-  // };
+  const handleClickNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
 
-  // const handleClickPrevious = () => {
-  //   setCurrentPage(currentPage - 1);
-  // };
+  const handleClickPrevious = () => {
+    setCurrentPage(currentPage - 1);
+  };
 
-  // useEffect(() => {
-  //   let copy = [...originalFunds];
+  useEffect(() => {
+    let copy = [...originalFunds];
 
-  //   if (search.length !== 0) {
-  //     copy = copy.filter((fund: fundType) =>
-  //       fund.name.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //   }
+    if (search.length !== 0) {
+      copy = copy.filter((fund: string) =>
+        fund.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
-  //   if (sortBy === "Aum") {
-  //     copy.sort((a, b) => b.aum - a.aum);
-  //   } else if (sortBy === "Members") {
-  //     copy.sort((a, b) => b.members - a.members);
-  //   } else if (sortBy === "All Time") {
-  //     copy.sort((a, b) => b.allTime - a.allTime);
-  //   }
+    setAccountsArrayCopy(copy);
+  }, [search, sortBy, originalFunds]);
 
-  //   setFundsArrayCopy(copy);
-  // }, [search, sortBy, originalFunds]);
+  useEffect(() => {
+    setOriginalFunds([...(smartAccountsArray as string[])]);
+    setLoading(false);
+  }, [smartAccountsArray]);
 
-  // useEffect(() => {
-  //   setOriginalFunds([...funds]);
-  // }, [funds]);
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === currentPage ||
+        i === currentPage - 1 ||
+        i === currentPage + 1 ||
+        i === totalPages
+      ) {
+        pageNumbers.push(i);
+      } else if (i === currentPage - 2 || i === currentPage + 2) {
+        pageNumbers.push("...");
+      }
+    }
 
-  // const renderPageNumbers = () => {
-  //   const pageNumbers = [];
-  //   for (let i = 1; i <= totalPages; i++) {
-  //     if (
-  //       i === 1 ||
-  //       i === currentPage ||
-  //       i === currentPage - 1 ||
-  //       i === currentPage + 1 ||
-  //       i === totalPages
-  //     ) {
-  //       pageNumbers.push(i);
-  //     } else if (i === currentPage - 2 || i === currentPage + 2) {
-  //       pageNumbers.push("...");
-  //     }
-  //   }
-
-  //   return pageNumbers.map((pageNumber, index) =>
-  //     pageNumber.toString() !== "..." ? (
-  //       <button
-  //         key={index}
-  //         className={
-  //           pageNumber === currentPage
-  //             ? "bg-main py-0.5 px-2 rounded-lg text-white"
-  //             : "mx-2.5"
-  //         }
-  //         onClick={() => handlePageChange(Number(pageNumber))}
-  //       >
-  //         {pageNumber}
-  //       </button>
-  //     ) : (
-  //       <span className="mx-1" key={index}>
-  //         {pageNumber}
-  //       </span>
-  //     )
-  //   );
-  // };
+    return pageNumbers.map((pageNumber, index) =>
+      pageNumber.toString() !== "..." ? (
+        <button
+          key={index}
+          className={
+            pageNumber === currentPage
+              ? "bg-main py-0.5 px-2 rounded-lg text-white"
+              : "mx-2.5"
+          }
+          onClick={() => handlePageChange(Number(pageNumber))}
+        >
+          {pageNumber}
+        </button>
+      ) : (
+        <span className="mx-1" key={index}>
+          {pageNumber}
+        </span>
+      )
+    );
+  };
 
   return (
     <main>
@@ -114,7 +133,7 @@ export default function Home() {
           return (
             <HomeCard
               title={infoCard.title}
-              amount={index === 0 ? 1000 : 1000000}
+              amount={index === 0 ? (totalAccounts as number) : 1000000}
               imageHeight={infoCard.imageHeight}
               imageWidth={infoCard.imageWidth}
               imageSrc={infoCard.imageSrc}
@@ -138,36 +157,46 @@ export default function Home() {
         />
       </div>
 
-      {/* <FundsTable
-        funds={fundsArrayCopy}
-        startIndex={startIndex}
-        endIndex={endIndex}
-        isPortfolio={false}
-      />
-      <div className="flex items-center mt-4 relative">
-        <span>
-          Showing {startIndex + 1}-{endIndex} out of {fundsArrayCopy.length}
-        </span>
-        <div className="flex justify-center items-center absolute inset-x-0 bottom-0 top-3">
-          {currentPage !== 1 && (
-            <button onClick={() => handleClickPrevious()}>
-              <ChevronLeftIcon
-                className=" w-[45px] h-[36px] text-black"
-                aria-hidden="true"
-              />
-            </button>
-          )}
-          {renderPageNumbers()}{" "}
-          {currentPage < fundsArrayCopy.length / 5 && (
-            <button onClick={() => handleClickNext()}>
-              <ChevronRightIcon
-                className=" w-[45px] h-[36px] text-black"
-                aria-hidden="true"
-              />
-            </button>
-          )}
+      {!loading ? (
+        <>
+          <FundsTable
+            accounts={accountsArrayCopy}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            isPortfolio={false}
+          />
+          <div className="flex items-center mt-4 relative">
+            <span>
+              Showing {startIndex + 1}-{endIndex} out of{" "}
+              {accountsArrayCopy.length}
+            </span>
+            <div className="flex justify-center items-center absolute inset-x-0 bottom-0 top-3">
+              {currentPage !== 1 && (
+                <button onClick={() => handleClickPrevious()}>
+                  <ChevronLeftIcon
+                    className=" w-[45px] h-[36px] text-black"
+                    aria-hidden="true"
+                  />
+                </button>
+              )}
+              {renderPageNumbers()}{" "}
+              {currentPage < accountsArrayCopy.length / 5 && (
+                <button onClick={() => handleClickNext()}>
+                  <ChevronRightIcon
+                    className=" w-[45px] h-[36px] text-black"
+                    aria-hidden="true"
+                  />
+                </button>
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="h-[400px] flex justify-center items-center">
+          {" "}
+          <Loader />
         </div>
-      </div> */}
+      )}
     </main>
   );
 }
