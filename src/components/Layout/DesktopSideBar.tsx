@@ -22,6 +22,7 @@ import { abiSCAFactory } from "../../../abis/abis.json";
 // Wagmi
 import {
   useAccount,
+  useContractRead,
   useContractWrite,
   useNetwork,
   usePrepareContractWrite,
@@ -41,6 +42,17 @@ export default function DesktopSideBar() {
 
   const { chain } = useNetwork();
   const { address } = useAccount();
+
+  const {
+    data: smartAccountsArray,
+    isError,
+    isLoading,
+  } = useContractRead({
+    address: scaFactoryFacetAddress,
+    abi: abiSCAFactory,
+    functionName: "getSmartContractAccountsByOwner",
+    args: [address],
+  });
 
   const { config: txContractConfig } = usePrepareContractWrite({
     address: scaFactoryFacetAddress,
@@ -147,12 +159,16 @@ export default function DesktopSideBar() {
               </Link>
             </div>
           ))}
-          <button
-            className="text-white bg-main px-[18px] py-[12px] rounded-xl text-sm font-medium hover:bg-mainHover"
-            onClick={() => onWagmiClick()}
-          >
-            Create Account
-          </button>
+          {smartAccountsArray !== undefined ? (
+            <div> </div>
+          ) : (
+            <button
+              className="text-white bg-main px-[18px] py-[12px] rounded-xl text-sm font-medium hover:bg-mainHover"
+              onClick={() => onWagmiClick()}
+            >
+              Create Account
+            </button>
+          )}
         </div>
       </div>
     </div>
