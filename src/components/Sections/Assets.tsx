@@ -10,7 +10,7 @@ import AssetsTable from "../Tables/AssetsTable";
 import SortBy from "../Filters/SortBy";
 import Spinner from "../Loader/Spinner";
 // Constants
-import { assetsPolygonMumbai } from "@/constants/Constants";
+import { assetsMode } from "@/constants/Constants";
 // Heroicons
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 // Wagmi
@@ -20,9 +20,7 @@ export default function Assets() {
   const [assetsArrayCopy, setAssetsArrayCopy] = useState<assetType[]>([]);
   const [initialAssets, setInitialAssets] = useState<assetType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedNetwork, setSelectedNetwork] = useState<NetworkType | null>(
-    null
-  );
+
   const [search, setSearch] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("Sort By");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -55,24 +53,12 @@ export default function Assets() {
     setCurrentPage(currentPage - 1);
   };
 
-  const fetchData = async (sortByNetwork: boolean) => {
-    let copy: any[] = [];
-    let initials: any[] = [];
-    if (!sortByNetwork) {
-      if (chain && chain.id === 919) {
-        copy = assetsPolygonMumbai;
-        initials = assetsPolygonMumbai;
-      }
-    } else {
-      if (selectedNetwork && selectedNetwork.id === 919) {
-        copy = assetsPolygonMumbai;
-        initials = assetsPolygonMumbai;
-      }
-    }
+  const fetchData = async () => {
+    let copy: any[] = assetsMode;
+    let initials: any[] = assetsMode;
 
-    const promises = copy.map(async (asset) => {
+    const promises = copy.map(async (asset: any) => {
       try {
-        console.log(`Fetching data for ${asset.coingeckoApi}`);
         const response = await axios.get(
           `https://api.coingecko.com/api/v3/coins/${asset.coingeckoApi}?x_cg_demo_api_key=${process.env.NEXT_PUBLIC_COINGECKO_API}`
         );
@@ -103,17 +89,13 @@ export default function Assets() {
 
   useEffect(() => {
     return () => {
-      fetchData(false);
+      fetchData();
     };
   }, []);
 
   useEffect(() => {
-    fetchData(false);
+    fetchData();
   }, [chain]);
-
-  useEffect(() => {
-    fetchData(true);
-  }, [selectedNetwork]);
 
   useEffect(() => {
     let copy = [...initialAssets];
@@ -189,10 +171,6 @@ export default function Assets() {
     );
   };
 
-  const getNetwork = (network: NetworkType) => {
-    setSelectedNetwork(network);
-  };
-
   return (
     <main>
       <div className="flex items-center gap-x-[20px] justify-end mt-20">
@@ -208,14 +186,6 @@ export default function Assets() {
           classSquare="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           selection={sortBy}
         />
-        {/* <SelectNetworkDropdown
-          getNetwork={getNetwork}
-          networks={networks}
-          selectedNetwork={selectedNetwork}
-          classDropdown={`inline-flex ${
-            selectedNetwork ? "w-fit py-2" : "w-[270px] py-3"
-          } shadow-lg outline-none bg-white items-center justify-between gap-x-1.5 rounded-full px-3  text-sm font-semibold text-gray-900`}
-        /> */}
       </div>
 
       {loading ? (

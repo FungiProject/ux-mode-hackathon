@@ -8,7 +8,7 @@ import { assetType } from "@/types/Types";
 // Wagmi
 import { useAccount, useContractRead, useNetwork } from "wagmi";
 // Constants
-import { assetsPolygonMumbai } from "@/constants/Constants";
+import { assetsMode } from "@/constants/Constants";
 // Utils
 import getMaxTokens from "@/utils/getMaxToken";
 // Viem
@@ -93,7 +93,7 @@ export default function Swapper({ actionSelected }: SwapperProps) {
 
   useEffect(() => {
     if (chain && chain.id === 919) {
-      setAssets(assetsPolygonMumbai);
+      setAssets(assetsMode);
       setNetwork("mumbai");
     }
   }, [chain]);

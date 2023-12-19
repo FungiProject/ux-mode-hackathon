@@ -33,7 +33,9 @@ function IntegrationCard({
                 height={35}
                 alt="Logo"
                 src={network}
-                className={index === 1 ? "-mx-2.5" : ""}
+                className={
+                  index === 1 ? "-mx-2.5 rounded-full" : "rounded-full"
+                }
                 key={network}
               />
             );

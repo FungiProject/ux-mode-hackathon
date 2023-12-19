@@ -49,6 +49,7 @@ export default function ChangeNetworkDropdown({
               alt="Network image"
               src={chainSelected.image}
               aria-hidden="true"
+              className="rounded-full"
             />
           ) : (
             <Image
@@ -57,6 +58,7 @@ export default function ChangeNetworkDropdown({
               alt="Network image"
               src={previousNetwork.image}
               aria-hidden="true"
+              className="rounded-full"
             />
           )}
           <ChevronDownIcon
@@ -103,7 +105,7 @@ export default function ChangeNetworkDropdown({
                       alt="Network image"
                       src={network.image}
                       aria-hidden="true"
-                      className={`${isModal ? "ml-4" : "ml-10"}`}
+                      className={`rounded-full ${isModal ? "ml-4" : "ml-10"}`}
                     />
                   </button>
                 </Menu.Item>

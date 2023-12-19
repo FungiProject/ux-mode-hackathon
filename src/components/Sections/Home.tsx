@@ -1,7 +1,7 @@
 // React
 import React, { useEffect, useState } from "react";
 // Constants
-import { homeCards, funds } from "@/constants/Constants";
+import { homeCards } from "@/constants/Constants";
 // Types
 import { fundType, homeDataType } from "@/types/Types";
 // Components
@@ -13,22 +13,22 @@ import SortBy from "../Filters/SortBy";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 export default function Home() {
-  const [fundsArrayCopy, setFundsArrayCopy] = useState<fundType[]>([...funds]);
-  const [originalFunds, setOriginalFunds] = useState([...funds]);
+  // const [fundsArrayCopy, setFundsArrayCopy] = useState<fundType[]>([...funds]);
+  // const [originalFunds, setOriginalFunds] = useState([...funds]);
   const [search, setSearch] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("Sort By");
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const ITEMS_PER_PAGE = 5;
-  const totalItems = fundsArrayCopy.length;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  // const ITEMS_PER_PAGE = 5;
+  // const totalItems = fundsArrayCopy.length;
+  // const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  // const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
+  // const handlePageChange = (newPage: number) => {
+  //   setCurrentPage(newPage);
+  // };
 
   const getInfo = (query: string) => {
     setSearch(query);
@@ -38,74 +38,74 @@ export default function Home() {
     setSortBy(option);
   };
 
-  const handleClickNext = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  // const handleClickNext = () => {
+  //   setCurrentPage(currentPage + 1);
+  // };
 
-  const handleClickPrevious = () => {
-    setCurrentPage(currentPage - 1);
-  };
+  // const handleClickPrevious = () => {
+  //   setCurrentPage(currentPage - 1);
+  // };
 
-  useEffect(() => {
-    let copy = [...originalFunds];
+  // useEffect(() => {
+  //   let copy = [...originalFunds];
 
-    if (search.length !== 0) {
-      copy = copy.filter((fund: fundType) =>
-        fund.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }
+  //   if (search.length !== 0) {
+  //     copy = copy.filter((fund: fundType) =>
+  //       fund.name.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //   }
 
-    if (sortBy === "Aum") {
-      copy.sort((a, b) => b.aum - a.aum);
-    } else if (sortBy === "Members") {
-      copy.sort((a, b) => b.members - a.members);
-    } else if (sortBy === "All Time") {
-      copy.sort((a, b) => b.allTime - a.allTime);
-    }
+  //   if (sortBy === "Aum") {
+  //     copy.sort((a, b) => b.aum - a.aum);
+  //   } else if (sortBy === "Members") {
+  //     copy.sort((a, b) => b.members - a.members);
+  //   } else if (sortBy === "All Time") {
+  //     copy.sort((a, b) => b.allTime - a.allTime);
+  //   }
 
-    setFundsArrayCopy(copy);
-  }, [search, sortBy, originalFunds]);
+  //   setFundsArrayCopy(copy);
+  // }, [search, sortBy, originalFunds]);
 
-  useEffect(() => {
-    setOriginalFunds([...funds]);
-  }, [funds]);
+  // useEffect(() => {
+  //   setOriginalFunds([...funds]);
+  // }, [funds]);
 
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      if (
-        i === 1 ||
-        i === currentPage ||
-        i === currentPage - 1 ||
-        i === currentPage + 1 ||
-        i === totalPages
-      ) {
-        pageNumbers.push(i);
-      } else if (i === currentPage - 2 || i === currentPage + 2) {
-        pageNumbers.push("...");
-      }
-    }
+  // const renderPageNumbers = () => {
+  //   const pageNumbers = [];
+  //   for (let i = 1; i <= totalPages; i++) {
+  //     if (
+  //       i === 1 ||
+  //       i === currentPage ||
+  //       i === currentPage - 1 ||
+  //       i === currentPage + 1 ||
+  //       i === totalPages
+  //     ) {
+  //       pageNumbers.push(i);
+  //     } else if (i === currentPage - 2 || i === currentPage + 2) {
+  //       pageNumbers.push("...");
+  //     }
+  //   }
 
-    return pageNumbers.map((pageNumber, index) =>
-      pageNumber.toString() !== "..." ? (
-        <button
-          key={index}
-          className={
-            pageNumber === currentPage
-              ? "bg-main py-0.5 px-2 rounded-lg text-white"
-              : "mx-2.5"
-          }
-          onClick={() => handlePageChange(Number(pageNumber))}
-        >
-          {pageNumber}
-        </button>
-      ) : (
-        <span className="mx-1" key={index}>
-          {pageNumber}
-        </span>
-      )
-    );
-  };
+  //   return pageNumbers.map((pageNumber, index) =>
+  //     pageNumber.toString() !== "..." ? (
+  //       <button
+  //         key={index}
+  //         className={
+  //           pageNumber === currentPage
+  //             ? "bg-main py-0.5 px-2 rounded-lg text-white"
+  //             : "mx-2.5"
+  //         }
+  //         onClick={() => handlePageChange(Number(pageNumber))}
+  //       >
+  //         {pageNumber}
+  //       </button>
+  //     ) : (
+  //       <span className="mx-1" key={index}>
+  //         {pageNumber}
+  //       </span>
+  //     )
+  //   );
+  // };
 
   return (
     <main>
@@ -138,7 +138,7 @@ export default function Home() {
         />
       </div>
 
-      <FundsTable
+      {/* <FundsTable
         funds={fundsArrayCopy}
         startIndex={startIndex}
         endIndex={endIndex}
@@ -167,7 +167,7 @@ export default function Home() {
             </button>
           )}
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }

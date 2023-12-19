@@ -11,7 +11,7 @@ import getMaxTokens from "@/utils/getMaxToken";
 // Wagmi
 import { useAccount, useNetwork } from "wagmi";
 // Constants
-import { assetsPolygonMumbai } from "@/constants/Constants";
+import { assetsMode } from "@/constants/Constants";
 
 type DWCActionCardProps = {
   actionSelected: string;
@@ -34,7 +34,7 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
     let assets;
     let network;
     if (chain && chain.id === 919) {
-      assets = assetsPolygonMumbai;
+      assets = assetsMode;
       network = "mumbai";
     }
     if (assets && address && network) {

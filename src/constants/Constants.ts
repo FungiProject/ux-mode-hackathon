@@ -6,52 +6,13 @@ import PortfolioNavBar from "../../public/PortfolioNavBar.svg";
 import Planet from "../../public/Planet.svg";
 import Coins from "../../public/Coins.svg";
 import DefaultImage from "../../public/DefaultImage.svg";
-// Arbitrum Tokens
-import Chainlink from "../../public/ArbitrumTokens/Chainlink.jpeg";
+// Mode Tokens
 import Polygon from "../../public/MainnetTokens/Polygon.svg";
 import Mainnet from "../../public/MainnetTokens/Mainnet.svg";
-import GMX from "../../public/ArbitrumTokens/GMX.svg";
-import WBTC from "../../public/ArbitrumTokens/WBTC.jpeg";
 import Tether from "../../public/ArbitrumTokens/Tether.jpeg";
-import Dai from "../../public/ArbitrumTokens/Dai.jpeg";
-import Lido from "../../public/ArbitrumTokens/Lido.jpeg";
-import Curve from "../../public/ArbitrumTokens/Curve.jpeg";
-import RocketPool from "../../public/ArbitrumTokens/RocketPool.jpeg";
-import Stargate from "../../public/ArbitrumTokens/Stargate.jpeg";
-import Radiant from "../../public/ArbitrumTokens/Radiant.jpeg";
-import Gains from "../../public/ArbitrumTokens/Gains.jpeg";
-import Joe from "../../public/ArbitrumTokens/Joe.jpeg";
-import Magic from "../../public/ArbitrumTokens/Magic.jpeg";
-import Pendle from "../../public/ArbitrumTokens/Pendle.jpeg";
-import Spell from "../../public/ArbitrumTokens/Spell.jpeg";
-import Balancer from "../../public/ArbitrumTokens/Balancer.jpeg";
-import Frax from "../../public/ArbitrumTokens/Frax.jpeg";
-import Sushi from "../../public/ArbitrumTokens/Sushi.jpeg";
-// Mainnet Tokens
-import Shiba from "../../public/MainnetTokens/Shiba.jpeg";
-import Arbitrum from "../../public/ArbitrumTokens/Arbitrum.svg";
-import Maker from "../../public/MainnetTokens/Maker.jpeg";
-import Immutable from "../../public/MainnetTokens/Immutable.jpeg";
-import Synthetix from "../../public/MainnetTokens/Synthetix.jpeg";
-import Sand from "../../public/MainnetTokens/Sand.jpeg";
-import Mana from "../../public/MainnetTokens/Mana.jpeg";
-import Fantom from "../../public/MainnetTokens/Fantom.jpeg";
-import ApeCoin from "../../public/MainnetTokens/ApeCoin.png";
-import TheGraph from "../../public/MainnetTokens/TheGraph.jpeg";
-import Compound from "../../public/MainnetTokens/Compound.jpeg";
-import inch from "../../public/MainnetTokens/1inch.jpeg";
-import BAT from "../../public/MainnetTokens/BAT.jpeg";
-import Convex from "../../public/MainnetTokens/Convex.jpeg";
-import Enjin from "../../public/MainnetTokens/Enjin.jpeg";
-import Olympus from "../../public/MainnetTokens/Olympus.jpeg";
-import ENS from "../../public/MainnetTokens/ENS.jpeg";
-import Ankr from "../../public/MainnetTokens/Ankr.jpeg";
-import Numeraire from "../../public/MainnetTokens/Numeraire.jpeg";
-import Perpetual from "../../public/MainnetTokens/Perpetual.jpeg";
-import YearnFinance from "../../public/MainnetTokens/YearnFinance.jpeg";
-import AAVE from "../../public/MainnetTokens/AAVE.svg";
 import Uniswap from "../../public/MainnetTokens/Uniswap.svg";
 import USDC from "../../public/MainnetTokens/USDC.svg";
+import Mode from "../../public/ModeChain.jpeg";
 
 // import Ox from "../../public/MainnetTokens/Ox.jpeg";
 
@@ -84,7 +45,7 @@ export const integrations = [
     title: "Uniswap V2",
     description:
       "Swap, earn, and build on the leading decentralized crypto trading protocol.",
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
+    networks: [Mode.src],
     status: true,
   },
   {
@@ -92,7 +53,7 @@ export const integrations = [
     title: "Uniswap V3",
     description:
       "Swap, earn, and build on the leading decentralized crypto trading protocol.",
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
+    networks: [Mode.src],
     status: true,
   },
 ];
@@ -114,388 +75,27 @@ export const homeCards = [
   },
 ];
 
-export const funds = [
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-  {
-    name: "Terminal Fund",
-    aum: 100,
-    networks: [Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 4345,
-    allTime: 3,
-    href: "0x",
-  },
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-  {
-    name: "Terminal Fund",
-    aum: 100,
-    networks: [Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 4345,
-    allTime: 3,
-    href: "0x",
-  },
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-  {
-    name: "Terminal Fund",
-    aum: 100,
-    networks: [Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 4345,
-    allTime: 3,
-    href: "0x",
-  },
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-  {
-    name: "Terminal Fund",
-    aum: 100,
-    networks: [Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 4345,
-    allTime: 3,
-    href: "0x",
-  },
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-  {
-    name: "Terminal Fund",
-    aum: 100,
-    networks: [Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 4345,
-    allTime: 3,
-    href: "0x",
-  },
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-  {
-    name: "Terminal Fund",
-    aum: 100,
-    networks: [Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 4345,
-    allTime: 3,
-    href: "0x",
-  },
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-  {
-    name: "Terminal Fund",
-    aum: 100,
-    networks: [Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 4345,
-    allTime: 3,
-    href: "0x",
-  },
-  {
-    name: "Block Fund",
-    aum: 10000200,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 15,
-    allTime: 23,
-    href: "0x",
-  },
-  {
-    name: "Flex Fund",
-    aum: 100022400,
-    networks: [Mainnet.src, Arbitrum.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -23,
-    href: "0x",
-  },
-  {
-    name: "Animal Fund",
-    aum: 2000000,
-    networks: [Mainnet.src, Arbitrum.src, Polygon.src],
-    image: DefaultImage.src,
-    members: 11345,
-    allTime: 13,
-    href: "0x",
-  },
-  {
-    name: "Fungi Fund",
-    aum: 10000,
-    networks: [Mainnet.src],
-    image: DefaultImage.src,
-    members: 13445,
-    allTime: -43,
-    href: "0x",
-  },
-];
+export const networks = [{ name: "Mode Testnet", id: 919, image: Mode.src }];
 
-export const networks = [{ name: "Mode Testnet", id: 919, image: Mainnet.src }];
-
-export const assetsPolygonMumbai = [
+export const assetsMode = [
   {
-    name: "Polygon",
-    address: "",
-    symbol: "MATIC",
-    coingeckoApi: "matic-network",
-    image: Polygon.src,
+    name: "Ethereum",
+    address: "0x4200000000000000000000000000000000000006",
+    symbol: "ETH",
+    coingeckoApi: "ethereum",
+    image: Mainnet.src,
   },
   {
-    name: "AAVE",
-    address: "",
-    symbol: "AAVE",
-    coingeckoApi: "aave",
-    image: AAVE.src,
+    name: "Tether",
+    address: "0xf0F161fDA2712DB8b566946122a5af183995e2eD",
+    symbol: "USDT",
+    coingeckoApi: "tether",
+    image: Tether.src,
   },
   {
-    name: "Uniswap",
-    address: "",
-    symbol: "UNI",
-    coingeckoApi: "uniswap",
-    image: Uniswap.src,
-  },
-  {
-    name: "USD Coin (PoS)",
-    address: "",
-    symbol: "USDC.e",
+    name: "USD Coin",
+    address: "0xd988097fb8612cc24eeC14542bC03424c656005f",
+    symbol: "USDC",
     coingeckoApi: "bridged-usdc-polygon-pos-bridge",
     image: USDC.src,
   },
