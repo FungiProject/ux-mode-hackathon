@@ -58,7 +58,7 @@ export default function FundsTableCard({
           className="rounded-full bg-main px-[10px] py-[8px] w-[75px] text-center text-white mr-[15px] hover:bg-mainHover"
           href={`/fund/${fund.href}`}
         >
-          {isPortfolio ? "Open" : "Join"}
+          See
         </Link>
       </div>
     </div>

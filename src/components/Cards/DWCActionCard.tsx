@@ -11,12 +11,7 @@ import getMaxTokens from "@/utils/getMaxToken";
 // Wagmi
 import { useAccount, useNetwork } from "wagmi";
 // Constants
-import {
-  assetsArbitrum,
-  assetsMainnet,
-  assetsPolygon,
-  assetsPolygonMumbai,
-} from "@/constants/Constants";
+import { assetsPolygonMumbai } from "@/constants/Constants";
 
 type DWCActionCardProps = {
   actionSelected: string;

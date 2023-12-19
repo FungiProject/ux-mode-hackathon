@@ -9,15 +9,8 @@ import SearchBar from "../Filters/SearchBar";
 import AssetsTable from "../Tables/AssetsTable";
 import SortBy from "../Filters/SortBy";
 import Spinner from "../Loader/Spinner";
-import SelectNetworkDropdown from "../Dropdown/SelectNetworkDropdown";
 // Constants
-import {
-  assetsPolygon,
-  assetsArbitrum,
-  assetsMainnet,
-  assetsPolygonMumbai,
-  networks,
-} from "@/constants/Constants";
+import { assetsPolygonMumbai } from "@/constants/Constants";
 // Heroicons
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 // Wagmi

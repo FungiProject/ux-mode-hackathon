@@ -1,8 +1,6 @@
 // React
 import React from "react";
 // Components
-import AboutFundCard from "../Cards/AboutFundCard";
-import FeesFundCards from "../Cards/FeesFundCards";
 import ResultsChart from "../Chart/ResultsChart";
 // Images
 import Polygon from "../../../public/MainnetTokens/Polygon.svg";
@@ -23,11 +21,6 @@ export default function OverviewView() {
         aum={aum}
         performance={performance}
       />
-      <h1 className="mt-[110px] ml-[40px] text-6xl">About</h1>
-      <div className="flex min-h-[316px] mt-[22px] flex-col xl:flex-row">
-        <AboutFundCard description={description} />
-        <FeesFundCards networks={networks} />
-      </div>
     </main>
   );
 }

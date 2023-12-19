@@ -8,12 +8,7 @@ import { assetType } from "@/types/Types";
 // Wagmi
 import { useAccount, useContractRead, useNetwork } from "wagmi";
 // Constants
-import {
-  assetsArbitrum,
-  assetsMainnet,
-  assetsPolygon,
-  assetsPolygonMumbai,
-} from "@/constants/Constants";
+import { assetsPolygonMumbai } from "@/constants/Constants";
 // Utils
 import getMaxTokens from "@/utils/getMaxToken";
 // Viem
