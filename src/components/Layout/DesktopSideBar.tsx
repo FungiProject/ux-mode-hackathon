@@ -11,7 +11,6 @@ import { navigation, networks } from "@/constants/Constants";
 // Images
 import Logo from "../../../public/Logo.svg";
 // Components
-import CreateFundModal from "../Modals/CreateFundModal";
 import SwitchNetworkModal from "../Modals/SwitchNetworkModal";
 
 import { useNetwork } from "wagmi";
@@ -21,7 +20,6 @@ function classNames(...classes: string[]) {
 }
 
 export default function DesktopSideBar() {
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const [restOfNetworks, setRestOfNetworks] = useState<NetworkType[]>([]);
   const [previousNetwork, setPreviousNetwork] = useState<NetworkType>();
   const [needSwitch, setNeedSwitch] = useState<boolean>(false);
@@ -31,10 +29,6 @@ export default function DesktopSideBar() {
 
   const getSwitchModal = (modalState: boolean) => {
     setNeedSwitch(modalState);
-  };
-
-  const getOpenModal = (status: boolean) => {
-    setOpenModal(status);
   };
 
   useEffect(() => {
@@ -107,11 +101,10 @@ export default function DesktopSideBar() {
           ))}
           <button
             className="text-white bg-main px-[18px] py-[12px] rounded-xl text-sm font-medium hover:bg-mainHover"
-            onClick={() => setOpenModal(true)}
+            // onClick={() => setOpenModal(true)}
           >
-            Create Fund
+            Create Account
           </button>
-          {openModal && <CreateFundModal getOpenModal={getOpenModal} />}
         </div>
       </div>
     </div>
