@@ -101,7 +101,7 @@ export const assetsMode = [
   },
 ];
 
-export const actions = ["Swap", "Fees", "Deposit", "Withdraw"];
+export const actions = ["Swap", "Transfer", "Deposit", "Withdraw"];
 
 export const fundViews = ["Overview", "Portfolio", "Activity"];
 
@@ -219,3 +219,7 @@ export const activities = [
     time: 1701772887,
   },
 ];
+
+export const diamondAddress = "0xea62f19e5aa1b1d894ac7c9e6040272912d1cf03";
+export const scaFactoryFacetAddress =
+  "0x2E026a70dB59DB355Aa476949B2461E491b20768";

@@ -7,13 +7,26 @@ import { useRouter } from "next/router";
 // Types
 import { navigationType, NetworkType } from "@/types/Types";
 // Constants
-import { navigation, networks } from "@/constants/Constants";
+import {
+  diamondAddress,
+  navigation,
+  networks,
+  scaFactoryFacetAddress,
+} from "@/constants/Constants";
 // Images
 import Logo from "../../../public/Logo.svg";
 // Components
 import SwitchNetworkModal from "../Modals/SwitchNetworkModal";
-
-import { useNetwork } from "wagmi";
+// Abi
+import { abiSCAFactory } from "../../../abis/abis.json";
+// Wagmi
+import {
+  useAccount,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -23,9 +36,44 @@ export default function DesktopSideBar() {
   const [restOfNetworks, setRestOfNetworks] = useState<NetworkType[]>([]);
   const [previousNetwork, setPreviousNetwork] = useState<NetworkType>();
   const [needSwitch, setNeedSwitch] = useState<boolean>(false);
+
   const router = useRouter();
 
   const { chain } = useNetwork();
+  const { address } = useAccount();
+
+  const { config: txContractConfig } = usePrepareContractWrite({
+    address: scaFactoryFacetAddress,
+    abi: abiSCAFactory,
+    functionName: "createSmartContractAccount",
+    args: [diamondAddress, address],
+  });
+
+  const { writeAsync: contractTx, data: dataTx } =
+    useContractWrite(txContractConfig);
+
+  const {
+    isSuccess: txSuccessWagmi,
+    isLoading: txLoadingWagmi,
+    isError: txErrorWagmi,
+  } = useWaitForTransaction({
+    confirmations: 3,
+    hash: dataTx?.hash,
+  });
+
+  const onWagmiClick = async () => {
+    try {
+      await contractTx?.();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    // if (txLoadingWagmi) {
+    //   getTxStatus("loading", functionName);
+    // }
+  }, [txSuccessWagmi, txLoadingWagmi, txErrorWagmi]);
 
   const getSwitchModal = (modalState: boolean) => {
     setNeedSwitch(modalState);
@@ -101,7 +149,7 @@ export default function DesktopSideBar() {
           ))}
           <button
             className="text-white bg-main px-[18px] py-[12px] rounded-xl text-sm font-medium hover:bg-mainHover"
-            // onClick={() => setOpenModal(true)}
+            onClick={() => onWagmiClick()}
           >
             Create Account
           </button>
