@@ -73,7 +73,7 @@ export default function SwitchNetworkModal({
                       as="h3"
                       className="text-center font-semibold leading-6 text-gray-900"
                     >
-                      Please, change your network to Polygon or Mumbai
+                      Please, change your network to Mode
                     </Dialog.Title>
                   </div>
                   <button
@@ -82,17 +82,17 @@ export default function SwitchNetworkModal({
                     }
                     key={previousNetwork.id}
                     onClick={() => closeModal(previousNetwork.id)}
-                    className="bg-gray-400 px-[24px] py-[16px] rounded-lg font-medium tracking-wide text-base flex mx-auto mt-4 items-center w-full"
+                    className="bg-gray-200 px-[24px] py-[16px] rounded-lg font-medium tracking-wide text-base flex mx-auto mt-4 items-center w-full"
                   >
-                    <div className="flex justify-between pl-[25px] pr-[12px] w-full">
-                      <div className="flex">
+                    <div className="flex justify-between pl-[25px] pr-[12px] w-full items-center">
+                      <div className="flex items-center">
                         <Image
-                          width={20}
-                          height={20}
+                          width={30}
+                          height={30}
                           alt="Previou Network Image"
                           src={previousNetwork.image}
                           aria-hidden="true"
-                          className="mr-2"
+                          className="mr-4 rounded-full"
                         />
                         <span>{previousNetwork.name}</span>
                       </div>
@@ -109,7 +109,7 @@ export default function SwitchNetworkModal({
                         disabled={!switchNetwork || network.id === chain?.id}
                         key={network.id}
                         onClick={() => closeModal(network.id)}
-                        className="bg-gray-200 px-[24px] py-[16px] rounded-lg font-medium tracking-wide text-base flex mx-auto mt-4 items-center w-full"
+                        className="bg-gray-100 px-[24px] py-[16px] rounded-lg font-medium tracking-wide text-base flex mx-auto mt-4 items-center w-full"
                       >
                         <div className="flex justify-between pl-[25px] pr-[12px] w-full">
                           <div className="flex">
