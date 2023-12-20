@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 // Constants
 import { fundViews } from "@/constants/Constants";
 // Wagmi
-import { useAccount } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
 // Components
 import ActionsButton from "../Buttons/ActionsButton";
 import UserInfo from "../Cards/UserInfo";
@@ -13,6 +13,8 @@ import ActivityView from "../FundViews/ActivityView";
 import OverviewView from "../FundViews/OverviewView";
 import PortfolioView from "../FundViews/PortfolioView";
 import ActionsSwitcher from "../Switchers/ActionsSwitcher";
+// Abis
+import { abiSmartContractAccount } from "../../../abis/abis.json";
 
 export default function FundDetails() {
   const [actionSelected, setActionSelected] = useState<string>("Overview");
@@ -21,8 +23,12 @@ export default function FundDetails() {
   const { address } = useAccount();
   const router = useRouter();
 
-  const owner = "0xF70c1cEa8909563619547128A92dd7CC965F9657";
-
+  const { data: owner } = useContractRead({
+    address: router?.query.address as `0x${string}`,
+    abi: abiSmartContractAccount,
+    functionName: "owner",
+  });
+  console.log(owner);
   const getActionSelected = (action: string) => {
     setActionSelected(action);
   };
@@ -64,7 +70,6 @@ export default function FundDetails() {
           <UserInfo
             address={router.query.address as `0x${string}`}
             isUser={false}
-            isOwner={owner === address}
           />
           <div className="flex flex-col items-end mb-[12px]">
             <ActionsButton

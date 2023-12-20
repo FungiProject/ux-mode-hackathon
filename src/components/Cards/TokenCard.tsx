@@ -7,7 +7,7 @@ import Image from "next/image";
 // Wagmi
 import { useAccount, useContractRead, useNetwork } from "wagmi";
 // Abis
-import { abiERC20 } from "../../../abis/abis.json";
+import { abiERC20, abiSmartContractAccount } from "../../../abis/abis.json";
 // Utils
 import getMaxTokens from "@/utils/getMaxToken";
 // Viem
@@ -16,41 +16,26 @@ import { formatUnits } from "viem";
 type TokenCardProps = {
   asset: assetType;
   getToken: (token: assetType) => void;
+  addressBalance: string;
 };
 
-export default function TokenCard({ asset, getToken }: TokenCardProps) {
-  const [network, setNetwork] = useState<string | null>(null);
-  const [balanceToken, setBalanceToken] = useState<null | number>(null);
-
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+export default function TokenCard({
+  asset,
+  getToken,
+  addressBalance,
+}: TokenCardProps) {
+  const { data: tokenToAmountMax } = useContractRead({
+    address: asset?.address as `0x${string}`,
+    abi: abiERC20,
+    functionName: "balanceOf",
+    args: [addressBalance],
+  });
 
   const { data: tokenFromDecimals } = useContractRead({
     address: asset?.address as `0x${string}`,
     abi: abiERC20,
     functionName: "decimals",
   });
-
-  useEffect(() => {
-    if (chain && chain.id === 919) {
-      setNetwork("mumbai");
-    }
-  }, [chain]);
-
-  useEffect(() => {
-    const fetchMax = async () => {
-      if (address && network && asset) {
-        try {
-          const result = await getMaxTokens(address, asset?.address, network);
-          setBalanceToken(result);
-        } catch (error) {
-          console.error("Error fetching max tokens of", asset.symbol);
-        }
-      }
-    };
-
-    fetchMax();
-  }, [address, network]);
 
   return (
     <button
@@ -71,13 +56,13 @@ export default function TokenCard({ asset, getToken }: TokenCardProps) {
           <span>{asset.symbol}</span>
         </div>
       </div>
-      {balanceToken &&
+      {tokenToAmountMax &&
       tokenFromDecimals !== undefined &&
-      Number(balanceToken) !== 0 ? (
+      Number(tokenToAmountMax) !== 0 ? (
         <div>
           {Number(
             formatUnits(
-              balanceToken as unknown as bigint,
+              tokenToAmountMax as unknown as bigint,
               tokenFromDecimals as number
             )
           ).toFixed(5)}

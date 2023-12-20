@@ -12,9 +12,17 @@ import { assetsMode } from "@/constants/Constants";
 // Utils
 import getMaxTokens from "@/utils/getMaxToken";
 // Viem
-import { formatUnits } from "viem";
+import { encodeFunctionData, formatUnits, parseUnits } from "viem";
 // Abis
-import { abiERC20 } from "../../../abis/abis.json";
+import {
+  abiERC20,
+  abiSmartContractAccount,
+  abiGenericSwapFacet,
+  abiUniswapV2,
+} from "../../../abis/abis.json";
+// Next
+import { useRouter } from "next/router";
+import { Contract, ethers } from "ethers";
 
 type SwapperProps = {
   actionSelected: string;
@@ -23,28 +31,33 @@ type SwapperProps = {
 export default function Swapper({ actionSelected }: SwapperProps) {
   const [amountTo, setAmountTo] = useState<number | undefined>(undefined);
   const [amountFrom, setAmountFrom] = useState<number | undefined>(undefined);
-  const [children, setChildren] = useState<ReactElement>(<span></span>);
-  const [balance, setBalance] = useState<number | undefined>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [tokenFrom, setTokenFrom] = useState<assetType | null>(null);
   const [tokenTo, setTokenTo] = useState<assetType | null>(null);
-  const [assets, setAssets] = useState<assetType[] | null>(null);
-  const [network, setNetwork] = useState<string | null>(null);
-
-  const [maxBalanceTokenFrom, setMaxBalanceTokenFrom] = useState<null | number>(
-    null
-  );
-  const [maxBalanceTokenTo, setMaxBalanceTokenTo] = useState<null | number>(
-    null
-  );
+  const [status, setStatus] = useState<string[]>([]);
+  const [data, setData] = useState<any>(null);
 
   const { address } = useAccount();
-  const { chain } = useNetwork();
+  const router = useRouter();
+  const diamondAddress = "0x2c0725061515A2C00F32ca30588Ee2079CDB84c9";
 
   const { data: tokenFromDecimals } = useContractRead({
     address: tokenFrom?.address as `0x${string}`,
     abi: abiERC20,
     functionName: "decimals",
+  });
+
+  const { data: tokenFromAmountMax } = useContractRead({
+    address: tokenFrom?.address as `0x${string}`,
+    abi: abiSmartContractAccount,
+    functionName: "getTokenBalance",
+    args: [router.query.address],
+  });
+
+  const { data: tokenToAmountMax } = useContractRead({
+    address: tokenTo?.address as `0x${string}`,
+    abi: abiSmartContractAccount,
+    functionName: "getTokenBalance",
+    args: [router.query.address],
   });
 
   const { data: tokenToDecimals } = useContractRead({
@@ -53,50 +66,13 @@ export default function Swapper({ actionSelected }: SwapperProps) {
     functionName: "decimals",
   });
 
-  const handleAmountChange = (amount: number) => {
+  const handleAmountChangeTo = (amount: number) => {
     setAmountTo(amount);
   };
 
-  useEffect(() => {
-    const fetchMax = async () => {
-      if (address && network && tokenFrom) {
-        try {
-          const result = await getMaxTokens(
-            address,
-            tokenFrom?.address,
-            network
-          );
-          setMaxBalanceTokenFrom(result);
-        } catch (error) {
-          console.error("Error fetching max tokens of", tokenFrom.symbol);
-        }
-      }
-    };
-
-    fetchMax();
-  }, [tokenFrom]);
-
-  useEffect(() => {
-    const fetchMax = async () => {
-      if (address && network && tokenTo) {
-        try {
-          const result = await getMaxTokens(address, tokenTo?.address, network);
-          setMaxBalanceTokenTo(result);
-        } catch (error) {
-          console.error("Error fetching max tokens of", tokenTo.symbol);
-        }
-      }
-    };
-
-    fetchMax();
-  }, [tokenTo]);
-
-  useEffect(() => {
-    if (chain && chain.id === 919) {
-      setAssets(assetsMode);
-      setNetwork("mumbai");
-    }
-  }, [chain]);
+  const handleAmountChangeFrom = (amount: number) => {
+    setAmountFrom(amount);
+  };
 
   const getTokenTo = (token: assetType) => {
     setTokenTo(token);
@@ -106,6 +82,22 @@ export default function Swapper({ actionSelected }: SwapperProps) {
     setTokenFrom(token);
   };
 
+  const getStatus = (status: string, statusFuction: string) => {
+    setStatus([status, statusFuction]);
+  };
+  console.log(
+    "tokenFrom",
+    tokenFrom?.address,
+    "tokenTo",
+    tokenTo?.address,
+    "amountFrom",
+    amountFrom,
+    "diamond",
+    diamondAddress,
+    "time",
+    (Number(new Date().getTime()) / 1000 + 60 * 20).toFixed(0)
+  );
+  console.log(status);
   return (
     <main className="mt-[58px] ">
       <div>
@@ -120,36 +112,41 @@ export default function Swapper({ actionSelected }: SwapperProps) {
             className="placeholder:text-gray-500 text-3xl outline-none"
             placeholder="0.00"
             value={amountFrom}
-            onChange={(e: any) => handleAmountChange(e.target.value)}
+            onChange={(e: any) => handleAmountChangeFrom(e.target.value)}
           />
           <div className="flex flex-col text-sm font-medium">
             <div className="flex flex-col text-sm font-medium">
-              {assets && (
+              {assetsMode && router.query.address && address && (
                 <TokenDropdown
-                  assets={assets}
+                  assets={assetsMode}
                   getToken={getTokenFrom}
                   token={tokenFrom}
                   oppositToken={tokenTo}
                   type="From"
+                  addressBalance={
+                    actionSelected === "Deposit"
+                      ? address
+                      : (router.query.address as string)
+                  }
                 />
               )}
 
               {tokenFrom &&
-              maxBalanceTokenFrom &&
+              tokenFromAmountMax &&
               tokenFromDecimals !== undefined ? (
                 <div className="mt-[6px]">
                   Balance:{" "}
                   <span>
                     {Number(
                       formatUnits(
-                        maxBalanceTokenFrom as unknown as bigint,
+                        tokenFromAmountMax as unknown as bigint,
                         tokenFromDecimals as number
                       )
                     ).toFixed(3)}
                   </span>
                   <button
                     className="text-main ml-1.5"
-                    onClick={() => setAmountTo(maxBalanceTokenFrom)}
+                    onClick={() => setAmountTo(tokenFromAmountMax as number)}
                   >
                     Max
                   </button>
@@ -170,32 +167,37 @@ export default function Swapper({ actionSelected }: SwapperProps) {
             className="placeholder:text-gray-500 text-3xl outline-none"
             placeholder="0.00"
             value={amountTo}
-            onChange={(e: any) => handleAmountChange(e.target.value)}
+            onChange={(e: any) => handleAmountChangeTo(e.target.value)}
           />
           <div className="flex flex-col text-sm font-medium">
-            {assets && (
+            {assetsMode && router.query.address && address && (
               <TokenDropdown
-                assets={assets}
+                assets={assetsMode}
                 getToken={getTokenTo}
                 token={tokenTo}
                 oppositToken={tokenFrom}
                 type="To"
+                addressBalance={
+                  actionSelected === "Deposit"
+                    ? address
+                    : (router.query.address as string)
+                }
               />
             )}
-            {tokenTo && maxBalanceTokenTo && tokenToDecimals !== undefined ? (
+            {tokenTo && tokenToAmountMax && tokenToDecimals !== undefined ? (
               <div className="mt-[6px]">
                 Balance:{" "}
                 <span>
                   {Number(
                     formatUnits(
-                      maxBalanceTokenTo as unknown as bigint,
+                      tokenToAmountMax as unknown as bigint,
                       tokenToDecimals as number
                     )
                   ).toFixed(3)}
                 </span>{" "}
                 <button
                   className="text-main ml-1.5"
-                  onClick={() => setAmountTo(maxBalanceTokenTo)}
+                  onClick={() => setAmountTo(tokenToAmountMax as number)}
                 >
                   Max
                 </button>
@@ -205,19 +207,90 @@ export default function Swapper({ actionSelected }: SwapperProps) {
             )}
           </div>
         </div>
-        {/* <TxButton
-          className={`bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover ${
-            approve ? "opacity-100" : "opacity-30"
-          }`}
-          children={<span>Approve {tokenFrom?.symbol}</span>}
-        /> */}
-        <TxButton
-          className={`bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover 
-            opacity-30
-          `}
-        >
-          <span>Swap {tokenFrom?.symbol}</span>
-        </TxButton>
+        {((status[0] !== "success" && status[1] !== "approve") ||
+          (status[0] === "loading" && status[1] === "approve")) &&
+        amountFrom &&
+        router.query.address ? (
+          <TxButton
+            className="bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover"
+            address={router.query.address as `0x${string}`}
+            abi={abiSmartContractAccount}
+            functionName={"approveERC20"}
+            args={[
+              tokenFrom?.address,
+              diamondAddress,
+              parseUnits(
+                amountFrom as unknown as string,
+                tokenFromDecimals as number
+              ),
+            ]}
+            getTxStatus={getStatus}
+          >
+            <span>Approve</span>
+          </TxButton>
+        ) : (
+          status[1] !== "approve" &&
+          status[0] !== "loading" &&
+          actionSelected !== "Transfer" && (
+            <button
+              className="bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover opacity-40"
+              disabled
+            >
+              Approve
+            </button>
+          )
+        )}
+        {amountFrom &&
+          tokenFrom &&
+          tokenTo &&
+          status[1] === "approveERC20" &&
+          status[0] === "success" && (
+            <TxButton
+              className="bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover"
+              address={router.query.address as `0x${string}`}
+              abi={abiSmartContractAccount}
+              functionName={"callDiamond"}
+              args={[
+                "0xeb5267ec7fbf7522a1d91db7f0b18003dbb74119",
+                0,
+                new ethers.utils.Interface(
+                  abiGenericSwapFacet
+                ).encodeFunctionData("swapTokensGeneric", [
+                  ethers.constants.HashZero,
+                  "",
+                  "",
+                  router.query.address,
+                  0,
+                  [
+                    {
+                      callTo: "0x5951479fE3235b689E392E9BC6E968CE10637A52",
+                      approveTo: "0x5951479fE3235b689E392E9BC6E968CE10637A52",
+                      sendingAssetId: tokenFrom?.address,
+                      receivingAssetId: tokenTo?.address,
+                      fromAmount: Number(
+                        parseUnits(amountFrom as unknown as string, 6)
+                      ),
+                      callData: new ethers.utils.Interface(
+                        abiUniswapV2
+                      ).encodeFunctionData("swapExactTokensForTokens", [
+                        parseUnits(amountFrom.toString(), 6).toString(),
+                        0,
+                        [tokenFrom?.address, tokenTo?.address],
+                        diamondAddress,
+                        (Number(new Date().getTime()) / 1000 + 60 * 20).toFixed(
+                          0
+                        ),
+                      ]),
+                      requiresDeposit: true,
+                    },
+                  ],
+                ]),
+              ]}
+              getTxStatus={getStatus}
+            >
+              <span>Swap {tokenFrom?.symbol}</span>
+            </TxButton>
+          )}
       </div>
     </main>
   );

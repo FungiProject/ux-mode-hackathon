@@ -14,10 +14,9 @@ import formatTimestampToDate from "@/utils/formatTimestampToDate";
 type UserInfoProps = {
   address: `0x${string}` | undefined;
   isUser: boolean;
-  isOwner: boolean;
 };
 
-export default function UserInfo({ address, isUser, isOwner }: UserInfoProps) {
+export default function UserInfo({ address, isUser }: UserInfoProps) {
   const [formatAddress, setFormatAddress] = useState<string | null>(null);
   const date = 1700559927000;
 

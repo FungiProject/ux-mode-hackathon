@@ -15,6 +15,7 @@ type TokenDropdownProps = {
   token: assetType | null;
   oppositToken: assetType | null;
   type: string;
+  addressBalance: string;
 };
 
 export default function TokenDropdown({
@@ -23,6 +24,7 @@ export default function TokenDropdown({
   token,
   oppositToken,
   type,
+  addressBalance,
 }: TokenDropdownProps) {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -64,6 +66,7 @@ export default function TokenDropdown({
           getToken={getToken}
           getOpenModal={getOpenModal}
           oppositToken={oppositToken}
+          addressBalance={addressBalance}
         />
       )}
     </div>

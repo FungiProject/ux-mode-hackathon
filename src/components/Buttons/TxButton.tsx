@@ -10,71 +10,63 @@ import {
 import { polygonMumbai } from "viem/chains";
 
 type TxButtonProps = {
-  // address: `0x${string}`;
-  // abi: any;
-  // functionName: string;
-  // args: any[];
+  address: `0x${string}`;
+  abi: any;
+  functionName: string;
+  args: any[];
   children: ReactElement;
-  // getTxStatus: (status: string, name: string) => void;
+  getTxStatus: (status: string, name: string) => void;
   className: string;
 };
 
 export default function TxButton({
-  // address,
-  // abi,
-  // functionName,
-  // args,
-  // getTxStatus,
+  address,
+  abi,
+  functionName,
+  args,
+  getTxStatus,
   children,
   className,
 }: TxButtonProps) {
-  // const { config: txContractConfig } = usePrepareContractWrite({
-  //   address: address,
-  //   abi: abi,
-  //   functionName: functionName,
-  //   args: args,
-  //   onError() {
-  //     getTxStatus("error", functionName);
-  //   },
-  // });
+  const { config: txContractConfig } = usePrepareContractWrite({
+    address: address,
+    abi: abi,
+    functionName: functionName,
+    args: args,
+  });
 
-  // const { writeAsync: contractTx, data: dataTx } =
-  //   useContractWrite(txContractConfig);
+  const { writeAsync: contractTx, data: dataTx } =
+    useContractWrite(txContractConfig);
 
-  // const {
-  //   isSuccess: txSuccessWagmi,
-  //   isLoading: txLoadingWagmi,
-  //   isError: txErrorWagmi,
-  // } = useWaitForTransaction({
-  //   confirmations: 3,
-  //   hash: dataTx?.hash,
-  //   onSuccess() {
-  //     getTxStatus("success", functionName);
-  //   },
-  //   onError() {
-  //     getTxStatus("error", functionName);
-  //   },
-  // });
+  const {
+    isSuccess: txSuccessWagmi,
+    isLoading: txLoadingWagmi,
+    isError: txErrorWagmi,
+  } = useWaitForTransaction({
+    confirmations: 5,
+    hash: dataTx?.hash,
+  });
 
-  // const onWagmiClick = async () => {
-  //   try {
-  //     await contractTx?.();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const onWagmiClick = async () => {
+    try {
+      await contractTx?.();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (txLoadingWagmi) {
-  //     getTxStatus("loading", functionName);
-  //   }
-  // }, [txSuccessWagmi, txLoadingWagmi, txErrorWagmi]);
+  useEffect(() => {
+    if (txLoadingWagmi) {
+      getTxStatus("loading", functionName);
+    } else if (txErrorWagmi) {
+      getTxStatus("error", functionName);
+    } else if (txSuccessWagmi) {
+      getTxStatus("success", functionName);
+    }
+  }, [txSuccessWagmi, txLoadingWagmi, txErrorWagmi]);
 
   return (
-    <button
-      className={className}
-      // onClick={() => onWagmiClick()}
-    >
+    <button className={className} onClick={() => onWagmiClick()}>
       {children}
     </button>
   );

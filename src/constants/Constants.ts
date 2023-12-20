@@ -1,5 +1,6 @@
 // Images
 import NetworkNavBar from "../../public/NetworkNavBar.svg";
+import Logo from "../../public/Logo.svg";
 import AssetsNavBar from "../../public/AssetsNavBar.svg";
 import IntegrationsNavBar from "../../public/IntegrationsNavBar.svg";
 import PortfolioNavBar from "../../public/PortfolioNavBar.svg";
@@ -75,29 +76,22 @@ export const networks = [{ name: "Mode Testnet", id: 919, image: Mode.src }];
 
 export const assetsMode = [
   {
-    name: "Ethereum",
-    address: "0x4200000000000000000000000000000000000006",
-    symbol: "ETH",
-    coingeckoApi: "ethereum",
-    image: Mainnet.src,
-  },
-  {
-    name: "Tether",
-    address: "0xf0F161fDA2712DB8b566946122a5af183995e2eD",
-    symbol: "USDT",
+    name: "USDT Fungi",
+    address: "0xBCc6f06b6d41732db56924A4B140fEa2d998F571",
+    symbol: "USDTFungi",
     coingeckoApi: "tether",
-    image: Tether.src,
+    image: Logo.src,
   },
   {
-    name: "USD Coin",
-    address: "0xd988097fb8612cc24eeC14542bC03424c656005f",
-    symbol: "USDC",
+    name: "USDC Fungi",
+    address: "0x3e57d0ec1ED203D9EEe2351189e20bAF5D83fB03",
+    symbol: "USDCFungi",
     coingeckoApi: "bridged-usdc-polygon-pos-bridge",
-    image: USDC.src,
+    image: Logo.src,
   },
 ];
 
-export const actions = ["Swap", "Transfer", "Deposit", "Withdraw"];
+export const actions = ["Swap", "Transfer", "Deposit"];
 
 export const fundViews = ["Overview", "Portfolio", "Activity"];
 

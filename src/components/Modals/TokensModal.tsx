@@ -15,6 +15,7 @@ interface TokensModalProps {
   getToken: (asset: assetType) => void;
   assets: assetType[];
   oppositToken: assetType | null;
+  addressBalance: string;
 }
 
 export default function TokensModal({
@@ -22,6 +23,7 @@ export default function TokensModal({
   assets,
   getToken,
   oppositToken,
+  addressBalance,
 }: TokensModalProps) {
   const [open, setOpen] = useState(true);
   const [search, setSearch] = useState<string>("");
@@ -127,6 +129,7 @@ export default function TokensModal({
                           asset={asset}
                           getToken={selectToken}
                           key={asset.address}
+                          addressBalance={addressBalance}
                         />
                       );
                     })}
