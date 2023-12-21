@@ -1,15 +1,14 @@
 // React
-import React, { useEffect, useState } from "react";
+import React from "react";
 // Types
 import { assetType } from "@/types/Types";
 // Next
 import Image from "next/image";
 // Wagmi
-import { useAccount, useContractRead, useNetwork } from "wagmi";
+import { useContractRead } from "wagmi";
 // Abis
-import { abiERC20, abiSmartContractAccount } from "../../../abis/abis.json";
-// Utils
-import getMaxTokens from "@/utils/getMaxToken";
+import { abiERC20 } from "../../../abis/abis.json";
+
 // Viem
 import { formatUnits } from "viem";
 

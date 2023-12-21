@@ -5,8 +5,6 @@ import TxButton from "../Buttons/TxButton";
 import TokenDropdown from "../Dropdown/TokenDropdown";
 import Loader from "../Loader/Spinner";
 import NotificationsCard from "./NotificationsCard";
-// Utils
-import getMaxTokens from "@/utils/getMaxToken";
 // Wagmi
 import { useAccount, useNetwork, useContractRead } from "wagmi";
 // Constants
@@ -16,7 +14,7 @@ import { assetType } from "@/types/Types";
 // Abis
 import { abiERC20, abiSmartContractAccount } from "../../../abis/abis.json";
 // Viem
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 // Next
 import { useRouter } from "next/router";
 // Images

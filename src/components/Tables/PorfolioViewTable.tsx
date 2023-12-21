@@ -4,6 +4,8 @@ import React from "react";
 import { assetType } from "@/types/Types";
 // Components
 import AssetsTableCard from "../Cards/AssetsTableCard";
+// Next
+import { useRouter } from "next/router";
 
 type PorfolioViewTableProps = {
   assets: assetType[];
@@ -16,6 +18,8 @@ export default function PorfolioViewTable({
   startIndex,
   endIndex,
 }: PorfolioViewTableProps) {
+  const router = useRouter();
+
   return (
     <div className="mt-[20px] w-full h-[574px] pt-[23px] px-[20px] bg-white rounded-lg">
       <div className="grid grid-cols-6 pb-[26px] text-xl font-medium px-10">
@@ -25,16 +29,18 @@ export default function PorfolioViewTable({
         <div className="text-center">Balance</div>{" "}
         <div className="text-center">Amount</div>
       </div>{" "}
-      {assets
-        .slice(startIndex, endIndex)
-        .map((asset: assetType, index: number) => (
-          <AssetsTableCard
-            asset={asset}
-            key={asset.name}
-            index={index}
-            isPortfolio={true}
-          />
-        ))}
+      {router.query.address &&
+        assets
+          .slice(startIndex, endIndex)
+          .map((asset: assetType, index: number) => (
+            <AssetsTableCard
+              asset={asset}
+              address={router.query.address as string}
+              key={asset.name}
+              index={index}
+              isPortfolio={true}
+            />
+          ))}
     </div>
   );
 }
