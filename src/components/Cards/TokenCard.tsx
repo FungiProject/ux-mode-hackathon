@@ -8,7 +8,6 @@ import Image from "next/image";
 import { useContractRead } from "wagmi";
 // Abis
 import { abiERC20 } from "../../../abis/abis.json";
-
 // Viem
 import { formatUnits } from "viem";
 

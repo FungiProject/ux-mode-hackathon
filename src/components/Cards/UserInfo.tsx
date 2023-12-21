@@ -18,7 +18,7 @@ type UserInfoProps = {
 
 export default function UserInfo({ address, isUser }: UserInfoProps) {
   const [formatAddress, setFormatAddress] = useState<string | null>(null);
-  const date = 1700559927000;
+  const date = 1703164301000;
 
   useEffect(() => {
     if (address) {

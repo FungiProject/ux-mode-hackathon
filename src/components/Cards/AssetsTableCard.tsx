@@ -17,8 +17,44 @@ type AssetsTableCardProps = {
   asset: assetType;
   index: number;
   isPortfolio?: boolean;
-  address: string;
+  address?: string;
 };
+
+const porfolioPageChildren = (
+  asset: assetType,
+  tokenBalance: any,
+  tokenFromDecimals: any
+) => (
+  <>
+    <div className="text-center">
+      ${asset?.price !== undefined ? formatNumber(asset.price) : 1}
+    </div>
+    <div className="text-center">
+      $
+      {tokenBalance
+        ? (
+            Number(
+              formatUnits(
+                tokenBalance as unknown as bigint,
+                tokenFromDecimals as number
+              )
+            ) * 1
+          ).toFixed(2)
+        : 0}
+    </div>
+    <div className="text-center">
+      {" "}
+      {tokenBalance
+        ? Number(
+            formatUnits(
+              tokenBalance as unknown as bigint,
+              tokenFromDecimals as number
+            )
+          ).toFixed(5)
+        : 0}
+    </div>
+  </>
+);
 
 export default function AssetsTableCard({
   asset,
@@ -26,7 +62,6 @@ export default function AssetsTableCard({
   isPortfolio,
   address,
 }: AssetsTableCardProps) {
-  const [balance, setBalance] = useState<number | null>(null);
   const { data: tokenBalance } = useContractRead({
     address: asset?.address as `0x${string}`,
     abi: abiERC20,
@@ -54,35 +89,6 @@ export default function AssetsTableCard({
     </>
   );
 
-  const porfolioPageChildren = (
-    <>
-      <div className="text-center">
-        ${asset?.price !== undefined && formatNumber(asset.price)}
-      </div>
-      <div className="text-center">${balance?.toFixed(2)}</div>
-      <div className="text-center">
-        {" "}
-        {Number(
-          formatUnits(
-            tokenBalance as unknown as bigint,
-            tokenFromDecimals as number
-          )
-        ).toFixed(5)}
-      </div>
-    </>
-  );
-
-  useEffect(() => {
-    setBalance(
-      Number(
-        formatUnits(
-          tokenBalance as unknown as bigint,
-          tokenFromDecimals as number
-        )
-      ) * Number(asset.price)
-    );
-  }, [tokenBalance]);
-
   return (
     <div className="border-t-1 border-gray-300 grid grid-cols-6 py-[24px] items-center px-10">
       <div className="flex items-center">
@@ -98,7 +104,9 @@ export default function AssetsTableCard({
       <div className="flex items-start flex-col col-span-2">
         <div>{asset.name}</div> <div>{asset.symbol}</div>
       </div>
-      {isPortfolio ? porfolioPageChildren : assetsPageChildren}
+      {isPortfolio
+        ? porfolioPageChildren(asset, tokenBalance, tokenFromDecimals)
+        : assetsPageChildren}
     </div>
   );
 }

@@ -8,16 +8,13 @@ import { fundType, homeDataType } from "@/types/Types";
 import HomeCard from "../Cards/HomeCard";
 import SearchBar from "../Filters/SearchBar";
 import FundsTable from "../Tables/FundsTable";
-import SortBy from "../Filters/SortBy";
+import Loader from "../Loader/Spinner";
 // Heroicons
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 // Wagmi
 import { useContractRead } from "wagmi";
 // Abi
 import { abiSCAFactory } from "../../../abis/abis.json";
-// Constants
-import { scaFactoryFacetAddress } from "@/constants/Constants";
-import Loader from "../Loader/Spinner";
 
 export default function Home() {
   const { data: smartAccountsArray } = useContractRead({
