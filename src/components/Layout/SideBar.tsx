@@ -1,5 +1,5 @@
 // React
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 // Components
 import ActionsSideBar from "./ActionsSideBar";
 import DesktopSideBar from "./DesktopSideBar";
@@ -15,6 +15,8 @@ interface SideBarProps {
 }
 
 export default function SideBar({ page }: SideBarProps) {
+  const [loadingSmartAccounts, setLoadingSmartAccounts] =
+    useState<boolean>(true);
   const { address } = useAccount();
 
   const { data: smartAccountsArray } = useContractRead({
@@ -24,9 +26,16 @@ export default function SideBar({ page }: SideBarProps) {
     args: [address],
   });
 
+  useEffect(() => {
+    setLoadingSmartAccounts(false);
+  }, [smartAccountsArray]);
+
   return (
     <div className="z-50">
-      <DesktopSideBar smartAccountsArray={smartAccountsArray as string[]} />
+      <DesktopSideBar
+        smartAccountsArray={smartAccountsArray as undefined | string[]}
+        loadingSmartAccounts={loadingSmartAccounts}
+      />
       <ActionsSideBar page={page} />
     </div>
   );

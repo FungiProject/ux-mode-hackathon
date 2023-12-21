@@ -3,6 +3,8 @@ import React, { ReactElement, useEffect, useState } from "react";
 // Components
 import TxButton from "../Buttons/TxButton";
 import TokenDropdown from "../Dropdown/TokenDropdown";
+import Loader from "../Loader/Spinner";
+import NotificationsCard from "./NotificationsCard";
 // Utils
 import getMaxTokens from "@/utils/getMaxToken";
 // Wagmi
@@ -17,6 +19,9 @@ import { abiERC20, abiSmartContractAccount } from "../../../abis/abis.json";
 import { formatUnits, parseUnits } from "viem";
 // Next
 import { useRouter } from "next/router";
+// Images
+import Error from "../../../public/Error.svg";
+import Success from "../../../public/Success.svg";
 
 type DWCActionCardProps = {
   actionSelected: string;
@@ -27,6 +32,9 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
   const [receiver, setReceiver] = useState<string | undefined>("");
   const [status, setStatus] = useState<string[]>([]);
   const [token, setToken] = useState<assetType | null>(null);
+  const [title, setTitle] = useState<string | null>(null);
+  const [image, setImage] = useState<string | ReactElement | null>(null);
+  const [txDescription, setTxDescription] = useState<string | null>(null);
 
   const { address } = useAccount();
   const router = useRouter();
@@ -37,12 +45,12 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
     functionName: "decimals",
   });
 
-  const { data: maxBalanceToken } = useContractRead({
-    address: token?.address as `0x${string}`,
-    abi: abiSmartContractAccount,
-    functionName: "getTokenBalance",
-    args: [router.query.address],
-  });
+  // const { data: maxBalanceToken } = useContractRead({
+  //   address: token?.address as `0x${string}`,
+  //   abi: abiSmartContractAccount,
+  //   functionName: "getTokenBalance",
+  //   args: [router.query.address],
+  // });
 
   const handleAmountChange = (amount: number) => {
     setAmount(amount);
@@ -66,6 +74,35 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
     setToken(null);
     setAmount(0);
   }, [actionSelected]);
+
+  useEffect(() => {
+    if (status[0] === "loading") {
+      setTitle("Processing");
+      setTxDescription("The transaction is being processed.");
+      setImage(Loader);
+    } else if (status[0] === "error") {
+      setTitle("Error");
+      setTxDescription("Failed transaction.");
+      setImage(Error.src);
+    } else if (status[0] === "success") {
+      setTitle("Success");
+      setTxDescription("The transaction was executed correctly");
+      setImage(Success.src);
+    }
+    if (
+      status[0] === "success" &&
+      (status[1] === "transfer" || status[1] === "transferERC20")
+    ) {
+      setReceiver("");
+      setToken(null);
+      setAmount(0);
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setImage(null);
+      }, 2000);
+    }
+  }, [status]);
 
   return (
     <main className="mt-[108px] ">
@@ -99,7 +136,7 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
               />
             )}
 
-            {token && maxBalanceToken && tokenDecimals !== undefined ? (
+            {/* {token && maxBalanceToken && tokenDecimals !== undefined ? (
               <div className="mt-[6px]">
                 Balance:{" "}
                 <span>
@@ -119,7 +156,7 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
               </div>
             ) : (
               <div></div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -140,10 +177,11 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
         </div>
       )}
       {actionSelected !== "Transfer" &&
-      ((status[0] !== "success" && status[1] !== "approve") ||
+      (status.length === 0 ||
         (status[0] === "loading" && status[1] === "approve")) &&
       amount &&
-      router.query.address ? (
+      router.query.address &&
+      token ? (
         <TxButton
           className="bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover"
           address={token?.address as `0x${string}`}
@@ -170,7 +208,8 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
         )
       )}
       {((actionSelected === "Transfer" && receiver !== "") ||
-        (status[1] === "approve" && status[0] !== "loading")) &&
+        (status[1] === "approve" && status[0] !== "loading") ||
+        (status[1] === "transfer" && status[0] === "loading")) &&
         amount &&
         router.query.address && (
           <TxButton
@@ -220,6 +259,13 @@ export default function DWCActionCard({ actionSelected }: DWCActionCardProps) {
         >
           Send
         </button>
+      )}
+      {title && image && txDescription && (
+        <NotificationsCard
+          title={title}
+          image={image}
+          txDescription={txDescription}
+        />
       )}
     </main>
   );

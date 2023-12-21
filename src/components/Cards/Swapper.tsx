@@ -3,16 +3,21 @@ import React, { ReactElement, useEffect, useState } from "react";
 // Components
 import TxButton from "../Buttons/TxButton";
 import TokenDropdown from "../Dropdown/TokenDropdown";
+import NotificationsCard from "./NotificationsCard";
+import Loader from "../Loader/Spinner";
 // Types
 import { assetType } from "@/types/Types";
 // Wagmi
-import { useAccount, useContractRead, useNetwork } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
 // Constants
-import { assetsMode } from "@/constants/Constants";
-// Utils
-import getMaxTokens from "@/utils/getMaxToken";
+import {
+  assetsMode,
+  diamondAddress,
+  genericSwapFacetAddress,
+  uniswapAddress,
+} from "@/constants/Constants";
 // Viem
-import { encodeFunctionData, formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 // Abis
 import {
   abiERC20,
@@ -22,7 +27,11 @@ import {
 } from "../../../abis/abis.json";
 // Next
 import { useRouter } from "next/router";
-import { Contract, ethers } from "ethers";
+// Ethers
+import { ethers } from "ethers";
+// Images
+import Error from "../../../public/Error.svg";
+import Success from "../../../public/Success.svg";
 
 type SwapperProps = {
   actionSelected: string;
@@ -34,11 +43,12 @@ export default function Swapper({ actionSelected }: SwapperProps) {
   const [tokenFrom, setTokenFrom] = useState<assetType | null>(null);
   const [tokenTo, setTokenTo] = useState<assetType | null>(null);
   const [status, setStatus] = useState<string[]>([]);
-  const [data, setData] = useState<any>(null);
+  const [title, setTitle] = useState<string | null>(null);
+  const [image, setImage] = useState<string | ReactElement | null>(null);
+  const [txDescription, setTxDescription] = useState<string | null>(null);
 
   const { address } = useAccount();
   const router = useRouter();
-  const diamondAddress = "0x2c0725061515A2C00F32ca30588Ee2079CDB84c9";
 
   const { data: tokenFromDecimals } = useContractRead({
     address: tokenFrom?.address as `0x${string}`,
@@ -46,19 +56,19 @@ export default function Swapper({ actionSelected }: SwapperProps) {
     functionName: "decimals",
   });
 
-  const { data: tokenFromAmountMax } = useContractRead({
-    address: tokenFrom?.address as `0x${string}`,
-    abi: abiSmartContractAccount,
-    functionName: "getTokenBalance",
-    args: [router.query.address],
-  });
+  // const { data: tokenFromAmountMax } = useContractRead({
+  //   address: tokenFrom?.address as `0x${string}`,
+  //   abi: abiSmartContractAccount,
+  //   functionName: "getTokenBalance",
+  //   args: [router.query.address],
+  // });
 
-  const { data: tokenToAmountMax } = useContractRead({
-    address: tokenTo?.address as `0x${string}`,
-    abi: abiSmartContractAccount,
-    functionName: "getTokenBalance",
-    args: [router.query.address],
-  });
+  // const { data: tokenToAmountMax } = useContractRead({
+  //   address: tokenTo?.address as `0x${string}`,
+  //   abi: abiSmartContractAccount,
+  //   functionName: "getTokenBalance",
+  //   args: [router.query.address],
+  // });
 
   const { data: tokenToDecimals } = useContractRead({
     address: tokenTo?.address as `0x${string}`,
@@ -85,19 +95,34 @@ export default function Swapper({ actionSelected }: SwapperProps) {
   const getStatus = (status: string, statusFuction: string) => {
     setStatus([status, statusFuction]);
   };
-  console.log(
-    "tokenFrom",
-    tokenFrom?.address,
-    "tokenTo",
-    tokenTo?.address,
-    "amountFrom",
-    amountFrom,
-    "diamond",
-    diamondAddress,
-    "time",
-    (Number(new Date().getTime()) / 1000 + 60 * 20).toFixed(0)
-  );
-  console.log(status);
+
+  useEffect(() => {
+    if (status[0] === "loading") {
+      setTitle("Processing");
+      setTxDescription("The transaction is being processed.");
+      setImage(Loader);
+    } else if (status[0] === "error") {
+      setTitle("Error");
+      setTxDescription("Failed transaction.");
+      setImage(Error.src);
+    } else if (status[0] === "success") {
+      setTitle("Success");
+      setTxDescription("The transaction was executed correctly");
+      setImage(Success.src);
+    }
+    if (status[0] === "success" && status[1] === "callDiamond") {
+      setAmountFrom(undefined);
+      setAmountTo(undefined);
+      setTokenFrom(null);
+      setTokenTo(null);
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setImage(null);
+      }, 2000);
+    }
+  }, [status]);
+
   return (
     <main className="mt-[58px] ">
       <div>
@@ -131,7 +156,7 @@ export default function Swapper({ actionSelected }: SwapperProps) {
                 />
               )}
 
-              {tokenFrom &&
+              {/* {tokenFrom &&
               tokenFromAmountMax &&
               tokenFromDecimals !== undefined ? (
                 <div className="mt-[6px]">
@@ -153,7 +178,7 @@ export default function Swapper({ actionSelected }: SwapperProps) {
                 </div>
               ) : (
                 <div></div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -184,7 +209,7 @@ export default function Swapper({ actionSelected }: SwapperProps) {
                 }
               />
             )}
-            {tokenTo && tokenToAmountMax && tokenToDecimals !== undefined ? (
+            {/* {tokenTo && tokenToAmountMax && tokenToDecimals !== undefined ? (
               <div className="mt-[6px]">
                 Balance:{" "}
                 <span>
@@ -204,13 +229,16 @@ export default function Swapper({ actionSelected }: SwapperProps) {
               </div>
             ) : (
               <div> </div>
-            )}
+            )} */}
           </div>
         </div>
-        {((status[0] !== "success" && status[1] !== "approve") ||
-          (status[0] === "loading" && status[1] === "approve")) &&
+
+        {(status.length === 0 ||
+          (status[0] === "loading" && status[1] === "approveERC20")) &&
         amountFrom &&
-        router.query.address ? (
+        router.query.address &&
+        tokenFrom &&
+        tokenTo ? (
           <TxButton
             className="bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover"
             address={router.query.address as `0x${string}`}
@@ -222,16 +250,15 @@ export default function Swapper({ actionSelected }: SwapperProps) {
               parseUnits(
                 amountFrom as unknown as string,
                 tokenFromDecimals as number
-              ),
+              ).toString(),
             ]}
             getTxStatus={getStatus}
           >
             <span>Approve</span>
           </TxButton>
         ) : (
-          status[1] !== "approve" &&
-          status[0] !== "loading" &&
-          actionSelected !== "Transfer" && (
+          status[1] !== "approveERC20" &&
+          status[0] !== "loading" && (
             <button
               className="bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover opacity-40"
               disabled
@@ -243,33 +270,38 @@ export default function Swapper({ actionSelected }: SwapperProps) {
         {amountFrom &&
           tokenFrom &&
           tokenTo &&
-          status[1] === "approveERC20" &&
-          status[0] === "success" && (
+          router.query.address &&
+          ((status[1] === "approveERC20" && status[0] === "success") ||
+            (status[1] === "callDiamond" && status[0] === "loading") ||
+            (status[1] === "callDiamond" && status[0] === "success")) && (
             <TxButton
               className="bg-main w-full mt-[12px] rounded-2xl py-[16px] text-white font-semibold tracking-wider hover:bg-mainHover"
               address={router.query.address as `0x${string}`}
               abi={abiSmartContractAccount}
               functionName={"callDiamond"}
               args={[
-                "0xeb5267ec7fbf7522a1d91db7f0b18003dbb74119",
+                genericSwapFacetAddress,
                 0,
+
                 new ethers.utils.Interface(
                   abiGenericSwapFacet
                 ).encodeFunctionData("swapTokensGeneric", [
                   ethers.constants.HashZero,
+
                   "",
                   "",
                   router.query.address,
                   0,
                   [
                     {
-                      callTo: "0x5951479fE3235b689E392E9BC6E968CE10637A52",
-                      approveTo: "0x5951479fE3235b689E392E9BC6E968CE10637A52",
+                      callTo: uniswapAddress,
+                      approveTo: uniswapAddress,
                       sendingAssetId: tokenFrom?.address,
                       receivingAssetId: tokenTo?.address,
-                      fromAmount: Number(
-                        parseUnits(amountFrom as unknown as string, 6)
-                      ),
+                      fromAmount: parseUnits(
+                        amountFrom.toString(),
+                        6
+                      ).toString(),
                       callData: new ethers.utils.Interface(
                         abiUniswapV2
                       ).encodeFunctionData("swapExactTokensForTokens", [
@@ -291,6 +323,13 @@ export default function Swapper({ actionSelected }: SwapperProps) {
               <span>Swap {tokenFrom?.symbol}</span>
             </TxButton>
           )}
+        {title && image && txDescription && (
+          <NotificationsCard
+            title={title}
+            image={image}
+            txDescription={txDescription}
+          />
+        )}
       </div>
     </main>
   );

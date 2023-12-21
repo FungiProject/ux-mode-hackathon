@@ -28,7 +28,7 @@ export default function FundDetails() {
     abi: abiSmartContractAccount,
     functionName: "owner",
   });
-  console.log(owner);
+
   const getActionSelected = (action: string) => {
     setActionSelected(action);
   };

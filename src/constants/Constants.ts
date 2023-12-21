@@ -77,14 +77,14 @@ export const networks = [{ name: "Mode Testnet", id: 919, image: Mode.src }];
 export const assetsMode = [
   {
     name: "USDT Fungi",
-    address: "0xBCc6f06b6d41732db56924A4B140fEa2d998F571",
+    address: "0xf60A79Bb58f9d365D64Ff6141FB3ba6166BDE21D",
     symbol: "USDTFungi",
     coingeckoApi: "tether",
     image: Logo.src,
   },
   {
     name: "USDC Fungi",
-    address: "0x3e57d0ec1ED203D9EEe2351189e20bAF5D83fB03",
+    address: "0x6Dcf6809e0386A93323f8bde9Bf35E414a32a0CF",
     symbol: "USDCFungi",
     coingeckoApi: "bridged-usdc-polygon-pos-bridge",
     image: Logo.src,
@@ -210,6 +210,9 @@ export const activities = [
   },
 ];
 
-export const diamondAddress = "0xea62f19e5aa1b1d894ac7c9e6040272912d1cf03";
+export const diamondAddress = "0x3FF2af507CC076AF0803fe37dC4F39998DB36927";
 export const scaFactoryFacetAddress =
-  "0x2E026a70dB59DB355Aa476949B2461E491b20768";
+  "0x5f53767a00848dAD38B56026E5c90af465f4f223";
+export const uniswapAddress = "0x5951479fE3235b689E392E9BC6E968CE10637A52";
+export const genericSwapFacetAddress =
+  "0xb812F1980A421bDFA0f15C9BA9ce878ce76F4091";

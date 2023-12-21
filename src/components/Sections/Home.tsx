@@ -1,7 +1,7 @@
 // React
 import React, { useEffect, useState } from "react";
 // Constants
-import { homeCards } from "@/constants/Constants";
+import { diamondAddress, homeCards } from "@/constants/Constants";
 // Types
 import { fundType, homeDataType } from "@/types/Types";
 // Components
@@ -21,14 +21,14 @@ import Loader from "../Loader/Spinner";
 
 export default function Home() {
   const { data: smartAccountsArray } = useContractRead({
-    address: scaFactoryFacetAddress,
+    address: diamondAddress,
     abi: abiSCAFactory,
     functionName: "getCreatedSmartContractAccounts",
     args: [],
   });
 
   const { data: totalAccounts } = useContractRead({
-    address: scaFactoryFacetAddress,
+    address: diamondAddress,
     abi: abiSCAFactory,
     functionName: "getSmartContractAccountCount",
     args: [],
@@ -41,7 +41,6 @@ export default function Home() {
     ...(smartAccountsArray ? (smartAccountsArray as string[]) : []),
   ]);
   const [search, setSearch] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("Sort By");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -58,10 +57,6 @@ export default function Home() {
 
   const getInfo = (query: string) => {
     setSearch(query);
-  };
-
-  const getSortChange = (option: string) => {
-    setSortBy(option);
   };
 
   const handleClickNext = () => {
@@ -82,7 +77,7 @@ export default function Home() {
     }
 
     setAccountsArrayCopy(copy);
-  }, [search, sortBy, originalFunds]);
+  }, [search, originalFunds]);
 
   useEffect(() => {
     setOriginalFunds([...(smartAccountsArray as string[])]);
@@ -148,12 +143,6 @@ export default function Home() {
           query={search}
           classMain="rounded-full text-black px-[22px] items-center w-[270px] shadow-lg outline-none placeholder:text-black bg-white flex"
           placeholder="Search"
-        />
-        <SortBy
-          getSortChange={getSortChange}
-          sorts={["Aum", "Members", "All Time"]}
-          classSquare="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          selection={sortBy}
         />
       </div>
 

@@ -1,5 +1,5 @@
 // React
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactElement } from "react";
 // Next
 import Image from "next/image";
 import Link from "next/link";
@@ -7,42 +7,46 @@ import { useRouter } from "next/router";
 // Types
 import { navigationType, NetworkType } from "@/types/Types";
 // Constants
-import {
-  diamondAddress,
-  navigation,
-  networks,
-  scaFactoryFacetAddress,
-} from "@/constants/Constants";
+import { diamondAddress, navigation, networks } from "@/constants/Constants";
 // Images
 import Logo from "../../../public/Logo.svg";
 // Components
 import SwitchNetworkModal from "../Modals/SwitchNetworkModal";
+import Loader from "../Loader/Spinner";
+import NotificationsCard from "../Cards/NotificationsCard";
 // Abi
 import { abiSCAFactory } from "../../../abis/abis.json";
 // Wagmi
 import {
   useAccount,
-  useContractRead,
   useContractWrite,
   useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
+// Images
+import Error from "../../../public/Error.svg";
+import Success from "../../../public/Success.svg";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 type DesktopSideBarProps = {
-  smartAccountsArray: string[];
+  smartAccountsArray: string[] | undefined;
+  loadingSmartAccounts: boolean;
 };
 
 export default function DesktopSideBar({
   smartAccountsArray,
+  loadingSmartAccounts,
 }: DesktopSideBarProps) {
   const [restOfNetworks, setRestOfNetworks] = useState<NetworkType[]>([]);
   const [previousNetwork, setPreviousNetwork] = useState<NetworkType>();
   const [needSwitch, setNeedSwitch] = useState<boolean>(false);
+  const [title, setTitle] = useState<string | null>(null);
+  const [image, setImage] = useState<string | ReactElement | null>(null);
+  const [txDescription, setTxDescription] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -50,7 +54,7 @@ export default function DesktopSideBar({
   const { address } = useAccount();
 
   const { config: txContractConfig } = usePrepareContractWrite({
-    address: scaFactoryFacetAddress,
+    address: diamondAddress,
     abi: abiSCAFactory,
     functionName: "createSmartContractAccount",
     args: [diamondAddress, address],
@@ -77,9 +81,25 @@ export default function DesktopSideBar({
   };
 
   useEffect(() => {
-    // if (txLoadingWagmi) {
-    //   getTxStatus("loading", functionName);
-    // }
+    if (txLoadingWagmi) {
+      setTitle("Processing");
+      setTxDescription("The transaction is being processed.");
+      setImage(Loader);
+    } else if (txErrorWagmi) {
+      setTitle("Error");
+      setTxDescription("Failed transaction.");
+      setImage(Error.src);
+    } else if (txSuccessWagmi) {
+      setTitle("Success");
+      setTxDescription("The transaction was executed correctly");
+      setImage(Success.src);
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setImage(null);
+        router.reload();
+      }, 2000);
+    }
   }, [txSuccessWagmi, txLoadingWagmi, txErrorWagmi]);
 
   const getSwitchModal = (modalState: boolean) => {
@@ -154,13 +174,22 @@ export default function DesktopSideBar({
               </Link>
             </div>
           ))}
-          {smartAccountsArray?.length === 0 && (
+          {smartAccountsArray !== undefined && !loadingSmartAccounts && (
             <button
               className="text-white bg-main px-[18px] py-[12px] rounded-xl text-sm font-medium hover:bg-mainHover"
               onClick={() => onWagmiClick()}
             >
               Create Account
             </button>
+          )}{" "}
+          {title && image && txDescription && (
+            <div className="absolute xl:right-[-1260px] top-[-40px]">
+              <NotificationsCard
+                title={title}
+                image={image}
+                txDescription={txDescription}
+              />
+            </div>
           )}
         </div>
       </div>

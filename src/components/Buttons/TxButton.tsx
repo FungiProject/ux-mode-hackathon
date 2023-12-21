@@ -1,5 +1,5 @@
 // React
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 // Wagmi
 import {
   useContractWrite,
@@ -8,6 +8,7 @@ import {
 } from "wagmi";
 // Viem
 import { polygonMumbai } from "viem/chains";
+import NotificationsCard from "../Cards/NotificationsCard";
 
 type TxButtonProps = {
   address: `0x${string}`;
@@ -66,8 +67,10 @@ export default function TxButton({
   }, [txSuccessWagmi, txLoadingWagmi, txErrorWagmi]);
 
   return (
-    <button className={className} onClick={() => onWagmiClick()}>
-      {children}
-    </button>
+    <>
+      <button className={className} onClick={() => onWagmiClick()}>
+        {children}
+      </button>
+    </>
   );
 }
